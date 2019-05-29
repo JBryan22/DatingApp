@@ -9,8 +9,12 @@ using Microsoft.EntityFrameworkCore;
 namespace DatingApp.API.Controllers
 {
     //http://localhost:5000/api/values
+    //[controller] is filled by the name of the controller (in this case Values)
     [Route("api/[controller]")]
+    //ApiController enforces routing and enables authorization
     [ApiController]
+    //using ControllerBase instead of controller because this is an API. Controller can return Views, whereas ControllerBase cannot.
+    //we are not returning views because this is just an API. Our Angular project is what is returning views.
     public class ValuesController : ControllerBase
     {
         private readonly DataContext _db;
