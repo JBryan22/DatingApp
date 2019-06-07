@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-primary">
   <div class="container">
 
+    <!--routerLinkActive just adds a class to a link when its the active route. it can apply to descendants if placed on a parent (we are doing that here)-->
     <a class="navbar-brand" [routerLink]="['/home']">Dating App</a>
     <ul *ngIf="loggedIn()" class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="active">
