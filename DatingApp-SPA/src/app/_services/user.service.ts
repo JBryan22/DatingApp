@@ -4,11 +4,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../_models/user';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    Authorization: 'Bearer ' + localStorage.getItem('token')
-  })
-};
+// *** using jwt module in app.module to automatically send tokens for certain routes. allows us to send token on login
+// so that we can see member list without having to refresh the page (previously on login the list wouldn't show because
+// we hadn't generated the token before viewing the page)
+// const httpOptions = {
+//   headers: new HttpHeaders({
+//     Authorization: 'Bearer ' + localStorage.getItem('token')
+//   })
+// };
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +23,11 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl + 'users', httpOptions);
+    return this.http.get<User[]>(this.baseUrl + 'users');
   }
 
   getUser(id): Observable<User> {
-    return this.http.get<User>(this.baseUrl + 'users/' + id, httpOptions);
+    return this.http.get<User>(this.baseUrl + 'users/' + id);
   }
 
 }
