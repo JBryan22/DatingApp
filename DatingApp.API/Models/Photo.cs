@@ -9,6 +9,8 @@ namespace DatingApp.API.Models
         public string Description { get; set; }
         public DateTime DateAdded { get; set; }
         public bool IsMain { get; set; }
+        // cloudinary sends back a publicID whenever you upload an image to their service. we need to store this public id for each photo
+        public string PublicId { get; set; }
         // by adding these 2 fields EF will understand that when a user is deleted, all photos that belong to that user should also be deleted
         // EF will create the foreign keys in the database for us based on these
         public User User { get; set; }
