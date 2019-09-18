@@ -36,9 +36,21 @@ namespace DatingApp.API.Controllers {
             _cloudinary = new Cloudinary(acc);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddPhotoForUser(int userid, PhotoForCreationDto photoForCreationDto) 
+        [HttpGet("{id}", Name = "GetPhoto")]
+        public async Task<IActionResult> GetPhoto(int id)
         {
+            var photoFromRepo = await _repo.GetPhoto(id);
+
+            var photo = _mapper.Map<PhotoForReturnDto>(photoFromRepo);
+
+            return Ok(photo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPhotoForUser(int userid, [FromForm] PhotoForCreationDto photoForCreationDto) 
+        {
+            // photo for creation dto is coming down from the front end. we will later map it to Photo model for storing in the DB
+            // after doing that we want to map it again to photoForReturn which includes the publicId so we can return it
             // simply checking to see if the person logged on is allowed to upload photos for this user
             if (userid != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
             {
@@ -84,7 +96,10 @@ namespace DatingApp.API.Controllers {
 
             if (await _repo.SaveAll())
             {
-                return Ok();
+                // the id gets generated after saving it to the DB
+                var photoToReturn = _mapper.Map<PhotoForReturnDto>(photo);
+                // "GetPhoto" is the get route created up above
+                return CreatedAtRoute("GetPhoto", new { id = photo.Id}, photoToReturn);
             }
 
             return BadRequest("Could not add the photo");
